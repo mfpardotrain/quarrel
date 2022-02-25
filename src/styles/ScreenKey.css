@@ -1,0 +1,27 @@
+.letter-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    background-color: lightgrey;
+    min-width: 25px;
+    padding: 0px 10px;
+    height: 35px;
+}
+
+.letter-container:hover {
+    cursor: pointer;
+} 
+
+.green {
+    background-color: rgb(99, 194, 90);
+}
+
+.yellow {
+    background-color: rgb(209, 189, 97);
+}
+
+.darkgrey {
+    background-color: rgb(109, 109, 109);
+}
