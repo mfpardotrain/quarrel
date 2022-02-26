@@ -1,0 +1,29 @@
+.create-game-button {
+    font-size: 10pt;
+    padding: 5px;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.word-choice {
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 2px;
+    background-color: rgb(163, 214, 248);
+    width: 100px;
+    height: 20px;
+}
+
+.choices-container {
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 300px;
+    height: 500px;
+}

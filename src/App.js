@@ -2,6 +2,7 @@ import './App.css';
 import Keyboard from './Keyboard';
 import { GuessContextWrapper } from './GuessContext';
 import Display from './Display';
+import Game from "./Game.js";
 
 function App() {
   return (
@@ -11,8 +12,9 @@ function App() {
       </h1>
 
       <GuessContextWrapper>
-          <Display />
-          <Keyboard />
+        <Game />
+        <Display />
+        <Keyboard />
       </GuessContextWrapper>
 
     </div>

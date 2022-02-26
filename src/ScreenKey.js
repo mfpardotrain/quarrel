@@ -9,7 +9,7 @@ const ScreenKey = (props) => {
 
     let findAllIndexes = (array, letter) => {
         return array.reduce((arr, e, i) => {
-            if (e == letter) arr.push(i);
+            if (e === letter) arr.push(i);
             return arr;
         }, []);
     }
@@ -22,7 +22,6 @@ const ScreenKey = (props) => {
             return "yellow";
         };
         return endCond;
-
     };
 
     let checkKey = () => {
