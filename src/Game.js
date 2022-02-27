@@ -45,7 +45,7 @@ const Game = (props) => {
                     createGame(setSuccess, { "answer": word });
                     if (!urlGameId) {
                         gameSocket.playerOneConnect(guestId, word);
-                        setConnectUrl(process.env.REACT_APP_API_URL + gameId);
+                        setConnectUrl(process.env.REACT_APP_CLIENT_URL + gameId);
                     } else {
                         gameSocket.playerTwoConnect(guestId, word);
                     }
