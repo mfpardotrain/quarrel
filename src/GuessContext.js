@@ -1,26 +1,41 @@
-import React, { useContext, useState, createContext } from 'react';
+import React, { useContext, useState, createContext, } from 'react';
+import { DefaultCallbackPostRequest } from './ApiUtils';
 
 export const GuessContext = createContext({
     "previousGuesses": [],
     "setpreviousGuesses": false,
     "guess": [],
-    "answer": ["w", "o", "r", "d", "s"],
+    "answer": false,
     "handleTyping": false
 });
 
 export const GuessContextWrapper = ({ children }) => {
     const [guessState, setGuessState] = useState([]);
     const [previousGuesses, setPreviousGuesses] = useState([]);
-    const [answer, setAnswer] = useState(["w", "o", "r", "d", "s"]);
-    let validWords = ["hello", "fatty", "lumpy", "cocoa", "bread", "words", "ooooo"];
+    const [answer, setAnswer] = useState(false);
     let guessString = guessState.join("");
 
-    const handleTyping = (event) => {
+    let bodyData = {
+        "word": guessString
+    };
+    const getIsValid = DefaultCallbackPostRequest('isWordValid/', bodyData);
+
+    let stupidWorkaround = (aa) => {
+        if ((answer.length < 1 || answer === false) && aa) {
+            setAnswer(aa)
+        }
+    }
+    
+
+    const handleTyping = async (event) => {
         switch (event.key) {
             case "Enter":
-                if (guessState.length === 5 && validWords.includes(guessString)) {
-                    setPreviousGuesses(previousGuesses => [...previousGuesses, guessState]);
-                    setGuessState([]);
+                if (guessState.length === 5) {
+                    let check = await getIsValid(false, false)
+                    if (check["data"]) {
+                        setPreviousGuesses(previousGuesses => [...previousGuesses, guessState]);
+                        setGuessState([]);
+                    }
                 };
                 break;
             case "Backspace":
@@ -41,6 +56,7 @@ export const GuessContextWrapper = ({ children }) => {
                 "handleTyping": handleTyping,
                 "previousGuesses": previousGuesses,
                 "answer": answer,
+                "setAnswer": stupidWorkaround,
             }}
         >
             {children}

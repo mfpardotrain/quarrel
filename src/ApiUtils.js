@@ -9,15 +9,17 @@ export function DefaultCallbackPostRequest(endPoint, bodyData, authTokens = '') 
     };
 
     const handleCallback = useCallback(async (setState = false, extraData = {}) => {
-        await fetch(url, {
+        let out = await fetch(url, {
             method: 'POST',
             headers: header,
             body: JSON.stringify(Object.assign({}, bodyData, extraData))
         })
             .then(res => res.json())
             .then(json => {
-                setState && setState(json.order_id)
+                setState && setState(json)
+                return json
             })
+            return (out)
     }, [bodyData]);
     return (handleCallback);
 }

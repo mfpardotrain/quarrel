@@ -6,10 +6,10 @@ import { CheckGuess } from "./CheckWords";
 const Display = () => {
     let { guess, previousGuesses, answer } = useGuessState();
 
-    let makeBoxes = (array, check=false) => {
+    let makeBoxes = (array, check = false) => {
         return (
             [...Array(5).keys()].map(el => {
-                let color = array[el] && check ? CheckGuess(array[el], el, answer) : "";
+                let color = array[el] && check ? CheckGuess(array[el], el, answer, array) : "";
                 return (
                     <div className={"display-letter " + color} key={el}>
                         {array[el] && array[el].toUpperCase()}
@@ -25,7 +25,7 @@ const Display = () => {
                 <div className="display-row" key={el}>
                     {previousGuesses[el] && makeBoxes(previousGuesses[el], true)}
                     {el === previousGuesses.length && guess && makeBoxes(guess)}
-                    {el > previousGuesses.length && makeBoxes(["","","","",""])}
+                    {el > previousGuesses.length && makeBoxes(["", "", "", "", ""])}
                 </div>
             )
         })

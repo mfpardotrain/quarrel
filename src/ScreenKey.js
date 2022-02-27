@@ -21,15 +21,17 @@ const ScreenKey = (props) => {
         if (array.some(el => el === "yellow")) {
             return "yellow";
         };
+        if (array.some(el => el === "darkgrey")) {
+            return "darkgrey"
+        }
         return endCond;
     };
 
     let checkKey = () => {
         let test = previousGuesses.map(array => {
-            console.log(letter)
             if (array.includes(letter)) {
                 let pos = findAllIndexes(array, letter);
-                let colors = pos.map(i => CheckGuess(letter, i, answer));
+                let colors = pos.map(i => CheckGuess(letter, i, answer, array));
                 return checkColors(colors);
             };
             return

@@ -1,8 +1,6 @@
 import './App.css';
-import Keyboard from './Keyboard';
 import { GuessContextWrapper } from './GuessContext';
-import Display from './Display';
-import Game from "./Game.js";
+import Pages from './Pages';
 
 function App() {
   return (
@@ -11,10 +9,9 @@ function App() {
         quarrel
       </h1>
 
+
       <GuessContextWrapper>
-        <Game />
-        <Display />
-        <Keyboard />
+        <Pages />
       </GuessContextWrapper>
 
     </div>
