@@ -45,7 +45,7 @@ const Game = (props) => {
                     createGame(setSuccess, { "answer": word });
                     if (!urlGameId) {
                         gameSocket.playerOneConnect(guestId, word);
-                        setConnectUrl("http://localhost:3000/?gameId=" + gameId);
+                        setConnectUrl(process.env.REACT_APP_API_URL + gameId);
                     } else {
                         gameSocket.playerTwoConnect(guestId, word);
                     }
@@ -54,18 +54,18 @@ const Game = (props) => {
                 {word}
             </div>)
     );
-    
+
     const setCopy = (el) => {
-        let copyStatusEl = document.getElementById("copy-status") 
+        let copyStatusEl = document.getElementById("copy-status")
         let urlBox = document.getElementById("connect-url")
         setCopySuccess(el)
         copyStatusEl.classList.add("fade-out")
         urlBox.classList.add("fade-background")
-        var listener = copyStatusEl.addEventListener('animationend', function() {
+        var listener = copyStatusEl.addEventListener('animationend', function () {
             copyStatusEl.classList.remove("fade-out");
             copyStatusEl.removeEventListener('animationend', listener);
         })
-        var listener2 = urlBox.addEventListener('animationend', function() {
+        var listener2 = urlBox.addEventListener('animationend', function () {
             urlBox.classList.remove("fade-background");
             urlBox.removeEventListener('animationend', listener2);
         })
