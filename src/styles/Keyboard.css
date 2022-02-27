@@ -16,3 +16,13 @@
     align-items: center;
 }
 
+@media screen and (max-width: 1000px) {
+
+    .keyboard-container {
+        bottom: 10px;
+    }
+
+    .keyboard-row {
+        width: 100%;
+    }
+}

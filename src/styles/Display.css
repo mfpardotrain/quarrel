@@ -39,3 +39,11 @@
 .darkgrey {
     background-color: rgb(109, 109, 109);
 }
+
+@media screen and (max-width: 1000px) {
+
+    .display-letter {
+        width: 25px;
+        height: 25px;
+    }
+}

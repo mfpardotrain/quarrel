@@ -12,7 +12,7 @@
 
 .letter-container:hover {
     cursor: pointer;
-} 
+}
 
 .green {
     background-color: rgb(99, 194, 90);
@@ -24,4 +24,13 @@
 
 .darkgrey {
     background-color: rgb(109, 109, 109);
+}
+
+@media screen and (max-width: 1000px) {
+
+    .letter-container {
+        min-width: 10px;
+        min-height: 10px;
+        font-size: 10px;
+    }
 }
