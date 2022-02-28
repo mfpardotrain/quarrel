@@ -7,7 +7,7 @@ class GameSocket {
     }
 
     connect() {
-        this.socket = new WebSocket("ws://localhost:8765/");
+        this.socket = new WebSocket("ws://18.119.105.184:8765/");
         this.socket.onopen = this.onOpen;
         this.socket.onmessage = (event) => this.onMessage(event, this);
         this.socket.onerror = this.onError;
