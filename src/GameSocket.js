@@ -8,6 +8,7 @@ class GameSocket {
 
     connect() {
         this.socket = new WebSocket("ws://18.119.105.184:8765/");
+        // this.socket = new WebSocket("ws://localhost:8765/");
         this.socket.onopen = this.onOpen;
         this.socket.onmessage = (event) => this.onMessage(event, this);
         this.socket.onerror = this.onError;
@@ -15,6 +16,14 @@ class GameSocket {
     }
 
     send(message) {
+        this.socket.send(JSON.stringify(message))
+    }
+
+    getGamestate() {
+        let message = {
+            method: "get_gamestate",
+            guestId: this.guestId
+        }
         this.socket.send(JSON.stringify(message))
     }
 
@@ -41,7 +50,10 @@ class GameSocket {
     sendClose() {
         let message = {
             method: "kill",
+            guestId: this.guestId,
+            gameId: this.gameId,
         }
+        this.answer = false
         this.socket.send(JSON.stringify(message))
     }
 
@@ -51,9 +63,9 @@ class GameSocket {
 
     onMessage(event, thisCopy) {
         let data = JSON.parse(event.data);
+        console.log(data)
         if (data["guest_id"] === this.guestId) {
-            console.log(data.answer)
-            // this.setAnswer(data.answer)
+            this.setAnswer(data.answer)
             this.answer = data.answer
         }
     }

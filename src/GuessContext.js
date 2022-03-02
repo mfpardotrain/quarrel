@@ -12,6 +12,10 @@ export const GuessContext = createContext({
 export const GuessContextWrapper = ({ children }) => {
     const [guessState, setGuessState] = useState([]);
     const [previousGuesses, setPreviousGuesses] = useState([]);
+    const [gameData, setGameData] = useState({});
+    const [success, setSuccess] = useState(false);
+
+    // const [answer, setAnswer] = useState(['s', 'c', 'a', 'n', 't']);
     const [answer, setAnswer] = useState(false);
     let guessString = guessState.join("");
 
@@ -19,13 +23,7 @@ export const GuessContextWrapper = ({ children }) => {
         "word": guessString
     };
     const getIsValid = DefaultCallbackPostRequest('isWordValid/', bodyData);
-
-    let stupidWorkaround = (aa) => {
-        if ((answer.length < 1 || answer === false) && aa) {
-            setAnswer(aa)
-        }
-    }
-    
+    const sendGamestate = DefaultCallbackPostRequest('normalGame/', gameData);
 
     const handleTyping = async (event) => {
         switch (event.key) {
@@ -35,6 +33,11 @@ export const GuessContextWrapper = ({ children }) => {
                     if (check["data"]) {
                         setPreviousGuesses(previousGuesses => [...previousGuesses, guessState]);
                         setGuessState([]);
+                        sendGamestate(setSuccess, { previousGuesses: previousGuesses })
+                        if (answer.join() === guessState.join()) {
+                            localStorage.removeItem("game_id")
+                            localStorage.removeItem("answer")
+                        }
                     }
                 };
                 break;
@@ -52,11 +55,13 @@ export const GuessContextWrapper = ({ children }) => {
     return (
         <GuessContext.Provider
             value={{
-                "guess": guessState,
+                "guessState": guessState,
                 "handleTyping": handleTyping,
                 "previousGuesses": previousGuesses,
                 "answer": answer,
-                "setAnswer": stupidWorkaround,
+                "setAnswer": setAnswer,
+                "setGameData": setGameData,
+                "success": success,
             }}
         >
             {children}

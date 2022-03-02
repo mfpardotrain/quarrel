@@ -4,10 +4,41 @@
   justify-content: center;
 }
 
+.app-header img {
+  width: 100%;
+  height: auto;
+}
+
 .App {
   width: 100%;
 }
 
 #root {
   width: 100%;
+}
+
+.css-logo {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: rgb(53, 53, 53);
+  border-radius: 5px;
+  padding: 2px 5px;
+}
+
+.logo-letter {
+  font-family: Sen, 'Sen', sans-serif;
+  font-weight: bold;
+}
+
+.letter-green {
+  color: rgb(99, 194, 90);
+}
+
+.letter-yellow {
+  color: rgb(209, 189, 97);
+}
+
+.letter-grey {
+  color: rgb(165, 165, 165);
 }

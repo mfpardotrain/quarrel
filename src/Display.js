@@ -4,7 +4,7 @@ import { CheckGuess } from "./CheckWords";
 
 
 const Display = () => {
-    let { guess, previousGuesses, answer } = useGuessState();
+    let { guessState, previousGuesses, answer } = useGuessState();
 
     let makeBoxes = (array, check = false) => {
         return (
@@ -24,7 +24,7 @@ const Display = () => {
             return (
                 <div className="display-row" key={el}>
                     {previousGuesses[el] && makeBoxes(previousGuesses[el], true)}
-                    {el === previousGuesses.length && guess && makeBoxes(guess)}
+                    {el === previousGuesses.length && guessState && makeBoxes(guessState)}
                     {el > previousGuesses.length && makeBoxes(["", "", "", "", ""])}
                 </div>
             )

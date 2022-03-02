@@ -1,31 +1,38 @@
 import { useState, useEffect } from 'react';
 import { DefaultCallbackPostRequest, DefaultCallbackGetRequest } from "./ApiUtils";
-import GameSocket from './GameSocket';
-import { v4 as uuidv4 } from 'uuid';
 import "./styles/Game.css"
 import { useGuessState } from './GuessContext';
 import { CopyClipboard } from './CopyClipboard';
 
 const Game = (props) => {
-    let { urlGameId } = props;
-    let guestId = !!localStorage.getItem("guest_id") ? localStorage.getItem("guest_id") : localStorage.setItem("guest_id", uuidv4());
-    let { setAnswer, answer, setValidWords } = useGuessState();
+    let { urlGameId, gameSocket, gameId, guestId } = props;
+    let { setAnswer, answer } = useGuessState();
     let [choices, setChoices] = useState(false);
     let [success, setSuccess] = useState(false);
     let [copySuccess, setCopySuccess] = useState(false);
     let [connectUrl, setConnectUrl] = useState(false);
     const startWebsocket = DefaultCallbackGetRequest("startWebsocket/", "", setChoices);
-    let [gameId, setGameId] = useState(urlGameId ? urlGameId : uuidv4());
-    let [gameSocket, setGameSocket] = useState(new GameSocket(gameId, guestId, setAnswer))
 
-    useEffect(() => {
-        setAnswer(gameSocket.answer)
+
+    useEffect(async () => {
+        if (!!!gameSocket.socket) {
+            await startWebsocket()
+            gameSocket.connect()
+        }
+        if (!answer) {
+            setTimeout(() => {
+                if (gameSocket.socket.readyState === 1) {
+                    gameSocket.getGamestate()
+                }
+            }, 50)
+        }
+        if (gameSocket.socket.readyState > 1) {
+            setAnswer(false)
+        }
+        if (gameSocket.socket.readyState === 1) {
+            setAnswer(gameSocket.answer)
+        }
     })
-
-    useEffect(() => {
-        startWebsocket()
-        gameSocket.connect()
-    }, [])
 
     let bodyData = {
         "guestId": guestId,
@@ -42,12 +49,13 @@ const Game = (props) => {
                 className="word-choice"
                 key={word}
                 onClick={() => {
-                    createGame(setSuccess, { "answer": word });
+                    let answer = Array.from(word)
+                    createGame(setSuccess, { "answer": answer });
                     if (!urlGameId) {
-                        gameSocket.playerOneConnect(guestId, word);
-                        setConnectUrl(process.env.REACT_APP_CLIENT_URL + gameId);
+                        gameSocket.playerOneConnect(guestId, answer);
+                        setConnectUrl(process.env.REACT_APP_CLIENT_URL + "gameId=" + gameId);
                     } else {
-                        gameSocket.playerTwoConnect(guestId, word);
+                        gameSocket.playerTwoConnect(guestId, answer);
                     }
                 }}
             >
@@ -58,6 +66,7 @@ const Game = (props) => {
     const setCopy = (el) => {
         let copyStatusEl = document.getElementById("copy-status")
         let urlBox = document.getElementById("connect-url")
+        console.log("in set copy")
         setCopySuccess(el)
         copyStatusEl.classList.add("fade-out")
         urlBox.classList.add("fade-background")
@@ -75,6 +84,7 @@ const Game = (props) => {
         <div className="create-game-container">
             {connectUrl &&
                 <>
+                    <div className='choice-prompt'>Send this link to your friend and wait for them to choose!</div>
                     <div className='connect-url' id='connect-url' onClick={(el) => CopyClipboard(el, setCopy)}>
                         {connectUrl}
                     </div>
@@ -87,9 +97,12 @@ const Game = (props) => {
                 <>
                     {!!!choices.data && <button className="create-game-button" onClick={() => getWords()}>Play with a friend</button>}
                     {choices.data &&
-                        <div className="choices-container">
-                            {choicesDisplay}
-                        </div>
+                        <>
+                            <div className='choice-prompt'>Choose their word</div>
+                            <div className="choices-container">
+                                {choicesDisplay}
+                            </div>
+                        </>
                     }
                 </>
             }
@@ -97,9 +110,12 @@ const Game = (props) => {
                 <>
                     {!!!choices.data && <button className="create-game-button" onClick={() => getWords()}>Get words</button>}
                     {choices.data &&
-                        <div className="choices-container">
-                            {choicesDisplay}
-                        </div>
+                        <>
+                            <div className='choice-prompt'>Choose their word</div>
+                            <div className="choices-container">
+                                {choicesDisplay}
+                            </div>
+                        </>
                     }
                 </>
             }
