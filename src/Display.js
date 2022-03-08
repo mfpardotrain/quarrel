@@ -1,10 +1,24 @@
 import "./styles/Display.css"
 import { useGuessState } from "./GuessContext";
 import { CheckGuess } from "./CheckWords";
+import { useEffect, useState } from "react";
+import { DefaultCallbackPostRequest } from "./ApiUtils";
 
 
 const Display = () => {
-    let { guessState, previousGuesses, answer } = useGuessState();
+    let { guessState, previousGuesses, answer, gameData, setPreviousGuesses } = useGuessState();
+
+
+
+    let body = {
+        gameId: gameData["gameId"],
+        guestId: gameData["guestId"]
+    }
+    const getPreviousGameData = DefaultCallbackPostRequest("getPreviousGameData/", body, "");
+
+    useEffect(() => {
+        getPreviousGameData(setPreviousGuesses)
+    }, [])
 
     let makeBoxes = (array, check = false) => {
         return (

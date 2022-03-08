@@ -58,9 +58,11 @@ export const GuessContextWrapper = ({ children }) => {
                 "guessState": guessState,
                 "handleTyping": handleTyping,
                 "previousGuesses": previousGuesses,
+                "setPreviousGuesses": setPreviousGuesses,
                 "answer": answer,
                 "setAnswer": setAnswer,
                 "setGameData": setGameData,
+                "gameData": gameData,
                 "success": success,
             }}
         >

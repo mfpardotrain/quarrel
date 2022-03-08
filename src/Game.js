@@ -13,7 +13,6 @@ const Game = (props) => {
     let [connectUrl, setConnectUrl] = useState(false);
     const startWebsocket = DefaultCallbackGetRequest("startWebsocket/", "", setChoices);
 
-
     useEffect(async () => {
         if (!!!gameSocket.socket) {
             await startWebsocket()
@@ -52,10 +51,10 @@ const Game = (props) => {
                     let answer = Array.from(word)
                     createGame(setSuccess, { "answer": answer });
                     if (!urlGameId) {
-                        gameSocket.playerOneConnect(guestId, answer);
+                        gameSocket.playerOneConnect(guestId, gameId, answer);
                         setConnectUrl(process.env.REACT_APP_CLIENT_URL + "gameId=" + gameId);
                     } else {
-                        gameSocket.playerTwoConnect(guestId, answer);
+                        gameSocket.playerTwoConnect(guestId, gameId, answer);
                     }
                 }}
             >

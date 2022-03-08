@@ -1,13 +1,12 @@
 class GameSocket {
 
-    constructor(gameId, guestId, setAnswer) {
-        this.gameId = gameId;
+    constructor(guestId, setAnswer) {
         this.guestId = guestId;
         this.setAnswer = setAnswer;
     }
 
     connect() {
-        this.socket = new WebSocket("ws://18.119.105.184:8765/");
+        this.socket = new WebSocket("ws://3.15.0.44:8765/");
         // this.socket = new WebSocket("ws://localhost:8765/");
         this.socket.onopen = this.onOpen;
         this.socket.onmessage = (event) => this.onMessage(event, this);
@@ -27,31 +26,31 @@ class GameSocket {
         this.socket.send(JSON.stringify(message))
     }
 
-    playerOneConnect(guestId, answer) {
+    playerOneConnect(guestId, gameId, answer) {
         let message = {
             method: "player_1_connect",
-            gameId: this.gameId,
+            gameId: gameId,
             guestId: guestId,
             answer: answer
         }
         this.socket.send(JSON.stringify(message))
     }
 
-    playerTwoConnect(guestId, answer) {
+    playerTwoConnect(guestId, gameId, answer) {
         let message = {
             method: "player_2_connect",
-            gameId: this.gameId,
+            gameId: gameId,
             guestId: guestId,
             answer: answer
         }
         this.socket.send(JSON.stringify(message))
     }
 
-    sendClose() {
+    sendClose(gameId) {
         let message = {
             method: "kill",
             guestId: this.guestId,
-            gameId: this.gameId,
+            gameId: gameId,
         }
         this.answer = false
         this.socket.send(JSON.stringify(message))
@@ -61,12 +60,13 @@ class GameSocket {
         console.log("connected!");
     }
 
-    onMessage(event, thisCopy) {
+    onMessage(event) {
         let data = JSON.parse(event.data);
         console.log(data)
         if (data["guest_id"] === this.guestId) {
             this.setAnswer(data.answer)
             this.answer = data.answer
+            console.log("answer", this.answer)
         }
     }
 

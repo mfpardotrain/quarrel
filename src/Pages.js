@@ -9,7 +9,7 @@ import "./styles/Pages.css";
 
 const Pages = () => {
     let token = window.location.href.includes("gameId=") && window.location.href.match(/gameId=.*/)[0].split("=")[1];
-    let { setAnswer, answer, setGameData, guessState, success } = useGuessState();
+    let { setAnswer, answer, setGameData, guessState, success, setPreviousGuesses } = useGuessState();
     let guestId = !!localStorage.getItem("guest_id") ? localStorage.getItem("guest_id") : localStorage.setItem("guest_id", uuidv4());
 
     let initialGameId = () => {
@@ -27,10 +27,10 @@ const Pages = () => {
     };
 
     let [gameId, setGameId] = useState(initialGameId);
-    let [gameSocket, setGameSocket] = useState(new GameSocket(gameId, guestId, setAnswer));
+    let [gameSocket, setGameSocket] = useState(new GameSocket(guestId, setAnswer));
 
     let quit = () => {
-        gameSocket.sendClose();
+        gameSocket.sendClose(gameId);
         setTimeout(setAnswer(false), 50)
         let gid = uuidv4()
         setGameId(gid)
