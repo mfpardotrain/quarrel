@@ -10,21 +10,23 @@ export const CopyClipboard = (el, setCopySuccess) => {
                 setCopySuccess("Copy failed!");
             }
         );
-    }
+    };
 
     const copyLink = (el) => {
-        navigator.permissions
-            .query({ name: "clipboard-write" })
-            .then((result) => {
-                console.log("result", result)
-                if (result.state === "granted" || result.state === "prompt" || true) {
-                    console.log("in copy link result")
-                    console.log(el.target.innerText)
-                    updateClipboard(el.target.innerText);
-                }
-            });
-    }
+        if (navigator.permissions) {
+            navigator.permissions
+                .query({ name: "clipboard-write" })
+                .then((result) => {
+                    if (result.state === "granted" || result.state === "prompt" || true) {
+                        updateClipboard(el.target.innerText);
+                    };
+                });
 
-    return copyLink(el)
-}
+        } else {
+            updateClipboard(el.target.innerText);
+        };
+    };
+
+    return copyLink(el);
+};
 

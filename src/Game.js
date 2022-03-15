@@ -3,6 +3,7 @@ import { DefaultCallbackPostRequest, DefaultCallbackGetRequest } from "./ApiUtil
 import "./styles/Game.css"
 import { useGuessState } from './GuessContext';
 import { CopyClipboard } from './CopyClipboard';
+import { v4 as uuidv4 } from 'uuid';
 
 const Game = (props) => {
     let { urlGameId, gameSocket, gameId, guestId } = props;
@@ -41,6 +42,12 @@ const Game = (props) => {
 
     const getWords = DefaultCallbackGetRequest("getWords/", "", setChoices);
     const createGame = DefaultCallbackPostRequest('normalGame/', bodyData);
+
+    const handleCreateGameButton = () => {
+        getWords()
+        let gid = uuidv4()
+        localStorage.setItem("game_id", gid)
+    }
 
     let choicesDisplay = choices.data && (
         choices.data.map(word =>
@@ -94,7 +101,7 @@ const Game = (props) => {
             }
             {!connectUrl && !urlGameId &&
                 <>
-                    {!!!choices.data && <button className="create-game-button" onClick={() => getWords()}>Play with a friend</button>}
+                    {!!!choices.data && <button className="create-game-button" onClick={() => handleCreateGameButton()}>Play with a friend</button>}
                     {choices.data &&
                         <>
                             <div className='choice-prompt'>Choose their word</div>

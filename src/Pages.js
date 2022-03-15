@@ -75,6 +75,7 @@ const Pages = () => {
         <div className='modal-background'>
             <div className='modal-content loser-container'>
                 <span className='loser'>Loser!</span>
+                <span className='loser'>The answer was {answer}</span>
                 <button className='create-game-button new-game-button' onClick={() => quit()}>New Game</button>
             </div>
         </div>

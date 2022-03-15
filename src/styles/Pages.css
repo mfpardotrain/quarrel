@@ -54,7 +54,7 @@
 
 .new-game-button {
     position: fixed;
-    background-color: white;
+    background-color: rgb(64, 72, 78);
 }
 
 .close {
@@ -69,4 +69,12 @@
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+
+@media screen and (max-width: 1000px) {
+
+    .quit-button {
+        font-size: 20px;
+    }
 }

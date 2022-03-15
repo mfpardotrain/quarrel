@@ -4,8 +4,8 @@
     justify-content: center;
     align-items: center;
     border-radius: 5px;
-    background-color: lightgrey;
-    color: white;
+    background-color: rgb(99, 99, 99);
+    color: rgb(219, 219, 219);
     min-width: 25px;
     padding: 0px 10px;
     height: 35px;
@@ -24,7 +24,7 @@
 }
 
 .darkgrey {
-    background-color: rgb(109, 109, 109);
+    background-color: rgb(53, 53, 53);
 }
 
 @media screen and (max-width: 1000px) {

@@ -6,7 +6,8 @@ class GameSocket {
     }
 
     connect() {
-        this.socket = new WebSocket("ws://3.15.0.44:8765/");
+        // this.socket = new WebSocket("ws://3.15.0.44:8765/");
+        this.socket = new WebSocket("wss://api.playquarrel.com/ws/");
         // this.socket = new WebSocket("ws://localhost:8765/");
         this.socket.onopen = this.onOpen;
         this.socket.onmessage = (event) => this.onMessage(event, this);

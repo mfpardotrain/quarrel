@@ -1,12 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300&display=swap');
+
 .create-game-button {
-    font-size: 10pt;
-    padding: 5px;
+    font-family: 'Fredoka', Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 20px;
+    padding: 20px;
     flex-direction: column;
     cursor: pointer;
-    background-color: rgb(247, 247, 247);
+    background-color: rgb(64, 72, 78);
     border: none;
-    border-radius: 4px;
-    box-shadow: 0px 1px 3px 1px lightgrey;
+    border: 1px solid white;
+    color: white;
+    font-weight: bold;
+}
+
+.create-game-button:hover {
+    cursor: pointer;
+    background-color: rgb(167, 167, 168);
 }
 
 .word-choice {
@@ -17,10 +26,17 @@
     cursor: pointer;
     padding: 10px;
     border-radius: 2px;
-    background-color: rgb(163, 214, 248);
-    box-shadow: 0px 1px 3px 1px lightgrey;
+    background-color: rgb(64, 72, 78);
     width: 100px;
     height: 20px;
+    color: white;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.word-choice:hover {
+    cursor: pointer;
+    background-color: rgb(167, 167, 168);
 }
 
 .choices-container {
@@ -41,21 +57,30 @@
 }
 
 .connect-url {
+    background-color: rgb(64, 72, 78);
+    font-weight: bold;
+    color: white;
     cursor: pointer;
     padding: 10px;
-    box-shadow: 0px 0px 3px 1px lightgrey;
+    border: 2px solid lightgrey;
     border-radius: 5px;
 }
 
 .copy-status {
+    color: white;
     margin: 10px;
     opacity: 0;
+    font-weight: bold;
+    letter-spacing: 2px;
 }
 
 .choice-prompt {
-    border-bottom: 1px solid darkgrey;
+    border-bottom: 2px solid rgb(141, 143, 145);
     padding: 0px 20px 5px 20px;
     margin-bottom: 20px;
+    font-weight: bold;
+    color: white;
+    letter-spacing: 1.5px;
 }
 
 @keyframes opacity-fade {
@@ -86,4 +111,13 @@
 .fade-background {
     animation-name: background-fade;
     animation-duration: 1s;
+}
+
+
+
+@media screen and (max-width: 1000px) {
+
+    .connect-url {
+        width: 90%;
+    }
 }

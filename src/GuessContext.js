@@ -17,6 +17,7 @@ export const GuessContextWrapper = ({ children }) => {
 
     // const [answer, setAnswer] = useState(['s', 'c', 'a', 'n', 't']);
     const [answer, setAnswer] = useState(false);
+
     let guessString = guessState.join("");
 
     let bodyData = {

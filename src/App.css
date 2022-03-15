@@ -1,3 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300&display=swap');
+
+html {
+  background-color: rgb(31, 42, 48);
+  height: max-content;
+}
+
 .app-header {
   display: flex;
   flex-direction: row;
@@ -10,6 +17,7 @@
 }
 
 .App {
+  font-family: 'Fredoka', Verdana, Geneva, Tahoma, sans-serif;
   width: 100%;
 }
 
@@ -21,13 +29,13 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  background-color: rgb(53, 53, 53);
+  background-color: rgb(64, 68, 73);
   border-radius: 5px;
   padding: 2px 5px;
 }
 
 .logo-letter {
-  font-family: Sen, 'Sen', sans-serif;
+  padding: 0px 2px;
   font-weight: bold;
 }
 
