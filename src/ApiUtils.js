@@ -19,7 +19,7 @@ export function DefaultCallbackPostRequest(endPoint, bodyData, authTokens = '') 
                 setState && setState(json)
                 return json
             })
-            return (out)
+        return (out)
     }, [bodyData]);
     return (handleCallback);
 }

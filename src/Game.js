@@ -72,7 +72,6 @@ const Game = (props) => {
     const setCopy = (el) => {
         let copyStatusEl = document.getElementById("copy-status")
         let urlBox = document.getElementById("connect-url")
-        console.log("in set copy")
         setCopySuccess(el)
         copyStatusEl.classList.add("fade-out")
         urlBox.classList.add("fade-background")

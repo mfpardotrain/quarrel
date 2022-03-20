@@ -26,20 +26,33 @@ export const GuessContextWrapper = ({ children }) => {
     const getIsValid = DefaultCallbackPostRequest('isWordValid/', bodyData);
     const sendGamestate = DefaultCallbackPostRequest('normalGame/', gameData);
 
+    const handleValidWord = async () => {
+        let out = await getIsValid(false, false);
+        if (!out["data"]) {
+            var guessEl = document.getElementById("current-guess");
+            guessEl.classList.add("shake")
+            var listener = guessEl.addEventListener('animationend', function () {
+                guessEl.classList.remove("shake");
+                guessEl.removeEventListener('animationend', listener);
+            })
+        };
+        return out;
+    };
+
     const handleTyping = async (event) => {
         switch (event.key) {
             case "Enter":
                 if (guessState.length === 5) {
-                    let check = await getIsValid(false, false)
+                    let check = await handleValidWord();
                     if (check["data"]) {
                         setPreviousGuesses(previousGuesses => [...previousGuesses, guessState]);
                         setGuessState([]);
-                        sendGamestate(setSuccess, { previousGuesses: previousGuesses })
+                        sendGamestate(setSuccess, { previousGuesses: previousGuesses });
                         if (answer.join() === guessState.join()) {
-                            localStorage.removeItem("game_id")
-                            localStorage.removeItem("answer")
-                        }
-                    }
+                            localStorage.removeItem("game_id");
+                            localStorage.removeItem("answer");
+                        };
+                    };
                 };
                 break;
             case "Backspace":

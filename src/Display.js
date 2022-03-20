@@ -6,9 +6,7 @@ import { DefaultCallbackPostRequest } from "./ApiUtils";
 
 
 const Display = () => {
-    let { guessState, previousGuesses, answer, gameData, setPreviousGuesses } = useGuessState();
-
-
+    let { guessState, previousGuesses, answer, gameData, setPreviousGuesses, isValid } = useGuessState();
 
     let body = {
         gameId: gameData["gameId"],
@@ -18,7 +16,7 @@ const Display = () => {
 
     useEffect(() => {
         getPreviousGameData(setPreviousGuesses)
-    }, [])
+    }, []);
 
     let makeBoxes = (array, check = false) => {
         return (
@@ -28,7 +26,7 @@ const Display = () => {
                     <div className={"display-letter " + color} key={el}>
                         {array[el] && array[el].toUpperCase()}
                     </div>
-                )
+                );
             })
         );
     };
@@ -36,12 +34,12 @@ const Display = () => {
     let boxes = (
         [...Array(6).keys()].map(el => {
             return (
-                <div className="display-row" key={el}>
+                <div className={"display-row"} id={el === previousGuesses.length && "current-guess"} key={el}>
                     {previousGuesses[el] && makeBoxes(previousGuesses[el], true)}
                     {el === previousGuesses.length && guessState && makeBoxes(guessState)}
                     {el > previousGuesses.length && makeBoxes(["", "", "", "", ""])}
                 </div>
-            )
+            );
         })
     );
 

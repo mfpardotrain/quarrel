@@ -9,6 +9,7 @@
     min-width: 25px;
     padding: 0px 10px;
     height: 35px;
+    margin: 0px 4px;
 }
 
 .letter-container:hover {
@@ -32,6 +33,7 @@
     .letter-container {
         min-width: 10px;
         min-height: 10px;
-        font-size: 10px;
+        font-size: 12px;
+        margin: 0px 2px;
     }
 }
