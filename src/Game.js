@@ -4,14 +4,13 @@ import "./styles/Game.css"
 import { useGuessState } from './GuessContext';
 import { CopyClipboard } from './CopyClipboard';
 import { v4 as uuidv4 } from 'uuid';
+import Keyboard from './Keyboard';
 
 const Game = (props) => {
-    let { urlGameId, gameSocket, gameId, guestId } = props;
-    let { setAnswer, answer } = useGuessState();
+    let { urlGameId, gameSocket, setUpGame, connectUrl } = props;
+    let { setAnswer, answer, choice } = useGuessState();
     let [choices, setChoices] = useState(false);
-    let [success, setSuccess] = useState(false);
     let [copySuccess, setCopySuccess] = useState(false);
-    let [connectUrl, setConnectUrl] = useState(false);
     const startWebsocket = DefaultCallbackGetRequest("startWebsocket/", "", setChoices);
 
     useEffect(async () => {
@@ -19,55 +18,39 @@ const Game = (props) => {
             await startWebsocket()
             gameSocket.connect()
         }
-        if (!answer) {
+        if (answer.length === 0) {
             setTimeout(() => {
                 if (gameSocket.socket.readyState === 1) {
                     gameSocket.getGamestate()
                 }
-            }, 50)
+            }, 100)
         }
         if (gameSocket.socket.readyState > 1) {
-            setAnswer(false)
+            setAnswer([]);
         }
         if (gameSocket.socket.readyState === 1) {
+            console.log(gameSocket.answer)
             setAnswer(gameSocket.answer)
         }
     })
 
-    let bodyData = {
-        "guestId": guestId,
-        "answer": answer,
-        "gameId": gameId
-    };
-
-    const getWords = DefaultCallbackGetRequest("getWords/", "", setChoices);
-    const createGame = DefaultCallbackPostRequest('normalGame/', bodyData);
-
     const handleCreateGameButton = () => {
-        getWords()
-        let gid = uuidv4()
-        localStorage.setItem("game_id", gid)
+        setChoices(true)
+        let gid = uuidv4();
+        localStorage.setItem("game_id", gid);
     }
 
-    let choicesDisplay = choices.data && (
-        choices.data.map(word =>
-            <div
-                className="word-choice"
-                key={word}
-                onClick={() => {
-                    let answer = Array.from(word)
-                    createGame(setSuccess, { "answer": answer });
-                    if (!urlGameId) {
-                        gameSocket.playerOneConnect(guestId, gameId, answer);
-                        setConnectUrl(process.env.REACT_APP_CLIENT_URL + "gameId=" + gameId);
-                    } else {
-                        gameSocket.playerTwoConnect(guestId, gameId, answer);
-                    }
-                }}
-            >
-                {word}
-            </div>)
-    );
+    let makeBoxes = (array) => {
+        return (
+            [...Array(5).keys()].map(el => {
+                return (
+                    <div className={"display-letter"} key={el}>
+                        {array[el] && array[el].toUpperCase()}
+                    </div>
+                );
+            })
+        );
+    };
 
     const setCopy = (el) => {
         let copyStatusEl = document.getElementById("copy-status")
@@ -75,6 +58,7 @@ const Game = (props) => {
         setCopySuccess(el)
         copyStatusEl.classList.add("fade-out")
         urlBox.classList.add("fade-background")
+
         var listener = copyStatusEl.addEventListener('animationend', function () {
             copyStatusEl.classList.remove("fade-out");
             copyStatusEl.removeEventListener('animationend', listener);
@@ -100,28 +84,25 @@ const Game = (props) => {
             }
             {!connectUrl && !urlGameId &&
                 <>
-                    {!!!choices.data && <button className="create-game-button" onClick={() => handleCreateGameButton()}>Play with a friend</button>}
-                    {choices.data &&
+                    {choices !== true && <button className="create-game-button" onClick={() => handleCreateGameButton()}>Play with a friend</button>}
+                    {choices === true &&
                         <>
                             <div className='choice-prompt'>Choose their word</div>
-                            <div className="choices-container">
-                                {choicesDisplay}
+                            <div className="display-row" id='current-guess'>
+                                {makeBoxes(choice)}
                             </div>
+                            <Keyboard setUpGame={setUpGame} />
                         </>
                     }
                 </>
             }
             {urlGameId &&
                 <>
-                    {!!!choices.data && <button className="create-game-button" onClick={() => getWords()}>Get words</button>}
-                    {choices.data &&
-                        <>
-                            <div className='choice-prompt'>Choose their word</div>
-                            <div className="choices-container">
-                                {choicesDisplay}
-                            </div>
-                        </>
-                    }
+                    <div className='choice-prompt'>Choose their word</div>
+                    <div className="display-row" id='current-guess'>
+                        {makeBoxes(choice)}
+                    </div>
+                    <Keyboard setUpGame={setUpGame} />
                 </>
             }
         </div>

@@ -5,7 +5,7 @@ export const GuessContext = createContext({
     "previousGuesses": [],
     "setpreviousGuesses": false,
     "guess": [],
-    "answer": false,
+    "answer": [],
     "handleTyping": false
 });
 
@@ -16,18 +16,26 @@ export const GuessContextWrapper = ({ children }) => {
     const [success, setSuccess] = useState(false);
 
     // const [answer, setAnswer] = useState(['s', 'c', 'a', 'n', 't']);
-    const [answer, setAnswer] = useState(false);
+    const [answer, setAnswer] = useState([]);
+    const [choice, setChoice] = useState([]);
 
     let guessString = guessState.join("");
+    let choiceString = choice.join("");
 
     let bodyData = {
         "word": guessString
     };
     const getIsValid = DefaultCallbackPostRequest('isWordValid/', bodyData);
+
+    let choiceBody = {
+        "word": choiceString
+    };
+    const getChoiceValid = DefaultCallbackPostRequest('isWordValid/', choiceBody);
+
     const sendGamestate = DefaultCallbackPostRequest('normalGame/', gameData);
 
-    const handleValidWord = async () => {
-        let out = await getIsValid(false, false);
+    const handleValidWord = async (validCheck) => {
+        let out = await validCheck(false, false);
         if (!out["data"]) {
             var guessEl = document.getElementById("current-guess");
             guessEl.classList.add("shake")
@@ -43,7 +51,7 @@ export const GuessContextWrapper = ({ children }) => {
         switch (event.key) {
             case "Enter":
                 if (guessState.length === 5) {
-                    let check = await handleValidWord();
+                    let check = await handleValidWord(getIsValid);
                     if (check["data"]) {
                         setPreviousGuesses(previousGuesses => [...previousGuesses, guessState]);
                         setGuessState([]);
@@ -55,7 +63,7 @@ export const GuessContextWrapper = ({ children }) => {
                     };
                 };
                 break;
-            case "Backspace":
+            case "Delete":
                 setGuessState(guessState => guessState.filter((_, i) => i !== guessState.length - 1));
                 break;
             default:
@@ -66,11 +74,33 @@ export const GuessContextWrapper = ({ children }) => {
         };
     };
 
+    const handleSetGuessTyping = async (event, setUpGame) => {
+        switch (event.key) {
+            case "Enter":
+                if (choice.length === 5) {
+                    let check = await handleValidWord(getChoiceValid);
+                    if (check["data"]) {
+                        setUpGame();
+                    };
+                };
+                break;
+            case "Delete":
+                setChoice(choice => choice.filter((_, i) => i !== choice.length - 1));
+                break;
+            default:
+                if (choice.length < 5) {
+                    setChoice(choice => [...choice, event.key]);
+                };
+
+        };
+    };
+
     return (
         <GuessContext.Provider
             value={{
                 "guessState": guessState,
                 "handleTyping": handleTyping,
+                "handleSetGuessTyping": handleSetGuessTyping,
                 "previousGuesses": previousGuesses,
                 "setPreviousGuesses": setPreviousGuesses,
                 "answer": answer,
@@ -78,6 +108,7 @@ export const GuessContextWrapper = ({ children }) => {
                 "setGameData": setGameData,
                 "gameData": gameData,
                 "success": success,
+                "choice": choice,
             }}
         >
             {children}

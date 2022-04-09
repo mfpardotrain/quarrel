@@ -4,8 +4,8 @@ import { useEffect } from 'react';
 import { CheckGuess } from './CheckWords';
 
 const ScreenKey = (props) => {
-    let { handleTyping, previousGuesses, answer } = useGuessState();
-    let { letter } = props;
+    let { handleTyping, handleSetGuessTyping, previousGuesses, answer } = useGuessState();
+    let { letter, setUpGame } = props;
 
     let findAllIndexes = (array, letter) => {
         return array.reduce((arr, e, i) => {
@@ -14,7 +14,7 @@ const ScreenKey = (props) => {
         }, []);
     }
 
-    let checkColors = (array, endCond="darkgrey") => {
+    let checkColors = (array, endCond = "darkgrey") => {
         if (array.some(el => el === "green")) {
             return "green";
         };
@@ -54,19 +54,19 @@ const ScreenKey = (props) => {
     });
 
     let handleCLick = (event) => {
-        handleTyping(event)
+        answer.length > 0 ? handleTyping(event) : handleSetGuessTyping(event, setUpGame);
     };
 
     let fakeEvent = {
         "key": letter
-    }
+    };
 
     return (
         <div className={"letter-container " + checkKey()}
             onClick={() => handleCLick(fakeEvent)}>
             {letter.toUpperCase()}
         </div>
-    )
+    );
 
 };
 

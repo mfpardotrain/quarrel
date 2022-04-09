@@ -1,15 +1,15 @@
 import './styles/Keyboard.css';
 import ScreenKey from './ScreenKey';
 
-const Keyboard = () => {
+const Keyboard = (props) => {
 
     let topLetters = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"]
     let middleLetters = ["a", "s", "d", "f", "g", "h", "j", "k", "l"]
-    let bottomLetters = ["Enter", "z", "x", "c", "v", "b", "n", "m", "Backspace"]
+    let bottomLetters = ["Enter", "z", "x", "c", "v", "b", "n", "m", "Delete"]
 
     let row = (letters) => {
         let screenKeys = letters.map(letter => {
-            return <ScreenKey letter={letter} key={letter}/>
+            return <ScreenKey letter={letter} setUpGame={props.setUpGame} key={letter} />
         })
         return screenKeys;
     };

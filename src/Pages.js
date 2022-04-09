@@ -6,10 +6,11 @@ import GameSocket from './GameSocket';
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from 'react';
 import "./styles/Pages.css";
+import { DefaultCallbackPostRequest } from "./ApiUtils";
 
 const Pages = () => {
     let token = window.location.href.includes("gameId=") && window.location.href.match(/gameId=.*/)[0].split("=")[1];
-    let { setAnswer, answer, setGameData, guessState, success, setPreviousGuesses } = useGuessState();
+    let { setAnswer, answer, setGameData, guessState, success, choice } = useGuessState();
     let guestId = !!localStorage.getItem("guest_id") ? localStorage.getItem("guest_id") : localStorage.setItem("guest_id", uuidv4());
 
     let initialGameId = () => {
@@ -31,11 +32,11 @@ const Pages = () => {
 
     let quit = () => {
         gameSocket.sendClose(gameId);
-        setTimeout(setAnswer(false), 50)
-        let gid = uuidv4()
-        setGameId(gid)
-        localStorage.setItem("game_id", gid)
-        window.location = process.env.REACT_APP_CLIENT_URL
+        setTimeout(setAnswer([]), 50);
+        let gid = uuidv4();
+        setGameId(gid);
+        localStorage.setItem("game_id", gid);
+        window.location = process.env.REACT_APP_CLIENT_URL;
     };
 
     useEffect(() => {
@@ -48,9 +49,36 @@ const Pages = () => {
         setGameData(gameData)
     }, [answer, gameId, guestId, guessState, setGameData]);
 
+    let [succes, setSuccess] = useState(false);
+    let [connectUrl, setConnectUrl] = useState(false);
+    let bodyData = {
+        "guestId": guestId,
+        "answer": answer,
+        "gameId": gameId
+    };
+    const createGame = DefaultCallbackPostRequest('normalGame/', bodyData);
+
+    const setUpGame = () => {
+        createGame(setSuccess, { "answer": choice });
+        if (!token) {
+            gameSocket.playerOneConnect(guestId, gameId, choice);
+            setConnectUrl(process.env.REACT_APP_CLIENT_URL + "gameId=" + gameId);
+            localStorage.setItem("game_id", gameId)
+        } else {
+            gameSocket.playerTwoConnect(guestId, gameId, choice);
+        };
+    };
+
     let home = (
         <div className='home'>
-            <Game gameSocket={gameSocket} urlGameId={token} gameId={gameId} guestId={guestId} />
+            <Game
+                gameSocket={gameSocket}
+                urlGameId={token}
+                gameId={gameId}
+                guestId={guestId}
+                setUpGame={setUpGame}
+                connectUrl={connectUrl}
+                setConnectUrl={setConnectUrl} />
         </div>
     );
 
@@ -83,8 +111,8 @@ const Pages = () => {
 
     return (
         <>
-            {!answer && home}
-            {answer && play}
+            {answer.length === 0 && home}
+            {answer.length !== 0 && play}
             {success && success["data"]["message"] === "winner" && winner}
             {success && success["data"]["message"] === "loser" && loser}
         </>

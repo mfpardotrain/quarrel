@@ -64,6 +64,8 @@
     padding: 10px;
     border: 2px solid lightgrey;
     border-radius: 5px;
+    text-align: center;
+    word-wrap: break-word;
 }
 
 .copy-status {
@@ -81,6 +83,8 @@
     font-weight: bold;
     color: white;
     letter-spacing: 1.5px;
+    text-align: center;
+    width: 80%;
 }
 
 @keyframes opacity-fade {

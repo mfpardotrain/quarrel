@@ -1,6 +1,4 @@
 export const CopyClipboard = (el, setCopySuccess) => {
-    console.log("in copy clipboard")
-
     const updateClipboard = (newClip) => {
         navigator.clipboard.writeText(newClip).then(
             () => {
