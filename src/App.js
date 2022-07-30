@@ -1,9 +1,11 @@
 import './App.css';
 import { GuessContextWrapper } from './GuessContext';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Pages from './Pages';
+import Admin from './Admin';
 
 function App() {
-  return (
+  const homeElement = (
     <div className="App">
       <h1 className="app-header">
         <div className='css-logo'>
@@ -21,6 +23,18 @@ function App() {
         <Pages />
       </GuessContextWrapper>
     </div>
+  )
+
+  if (!(window.location.href.includes("home") || window.location.href.includes("admin"))) {
+    window.location.replace(window.location.origin + "/home")
+  }
+  return (
+    <Router>
+      <Routes>
+        <Route exact path='/home' element={homeElement} />
+        <Route path='/admin' element={<Admin />} />
+      </Routes>
+    </Router>
   );
 }
 

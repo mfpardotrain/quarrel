@@ -36,7 +36,7 @@ const Pages = () => {
         let gid = uuidv4();
         setGameId(gid);
         localStorage.setItem("game_id", gid);
-        window.location = process.env.REACT_APP_CLIENT_URL;
+        window.location = process.env.REACT_APP_CLIENT_URL + "/home";
     };
 
     useEffect(() => {
@@ -62,7 +62,7 @@ const Pages = () => {
         createGame(setSuccess, { "answer": choice });
         if (!token) {
             gameSocket.playerOneConnect(guestId, gameId, choice);
-            setConnectUrl(process.env.REACT_APP_CLIENT_URL + "gameId=" + gameId);
+            setConnectUrl(process.env.REACT_APP_CLIENT_URL + "/home?gameId=" + gameId);
             localStorage.setItem("game_id", gameId)
         } else {
             gameSocket.playerTwoConnect(guestId, gameId, choice);

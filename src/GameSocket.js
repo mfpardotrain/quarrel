@@ -1,9 +1,10 @@
 class GameSocket {
 
-    constructor(guestId, setAnswer) {
-        this.guestId = guestId;
+    constructor(guestId, setAnswer, admin = false) {
+        this.guestId = admin ? "admin" : guestId;
         this.setAnswer = setAnswer;
         this.answer = [];
+        this.admin = null;
     };
 
     connect() {
@@ -68,6 +69,9 @@ class GameSocket {
             this.answer = data.answer;
             console.log("answer", this.answer);
         };
+        if (data["allGames"] === true) {
+            this.setAnswer(data.data);
+        };
     };
 
     onError(event) {
@@ -80,7 +84,11 @@ class GameSocket {
     };
 
     onClose() {
-        console.log("connection closed.")
+        console.log("connection closed.");
+    };
+
+    getAllGames() {
+        this.socket.send(JSON.stringify({ method: "get_all_games" }));
     };
 
 }

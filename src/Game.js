@@ -29,7 +29,6 @@ const Game = (props) => {
             setAnswer([]);
         }
         if (gameSocket.socket.readyState === 1) {
-            console.log(gameSocket.answer)
             setAnswer(gameSocket.answer)
         }
     })

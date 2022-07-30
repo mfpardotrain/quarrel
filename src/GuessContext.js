@@ -48,6 +48,7 @@ export const GuessContextWrapper = ({ children }) => {
     };
 
     const handleTyping = async (event) => {
+        console.log(event)
         switch (event.key) {
             case "Enter":
                 if (guessState.length === 5) {
@@ -67,6 +68,7 @@ export const GuessContextWrapper = ({ children }) => {
                 setGuessState(guessState => guessState.filter((_, i) => i !== guessState.length - 1));
                 break;
             default:
+                console.log(event)
                 if (guessState.length < 5) {
                     setGuessState(guessState => [...guessState, event.key]);
                 };
